@@ -1,8 +1,9 @@
 package org.example.managers;
 
-import org.example.beginningClasses.*;
-import org.example.tools.HumanComparator;
+import org.example.beginningClasses.HumanBeing;
+import org.example.beginningClasses.Mood;
 import org.example.comands.Command;
+import org.example.tools.HumanComparator;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -12,16 +13,13 @@ import java.util.Collections;
 import java.util.Scanner;
 import java.util.Vector;
 
-import static org.example.tools.Printer.print;
-import static org.example.managers.serverTools.FileScanner.scan;
-import static java.lang.Boolean.parseBoolean;
 import static java.lang.Double.parseDouble;
 import static java.lang.Integer.parseInt;
 import static java.lang.Math.max;
 import static java.lang.String.valueOf;
-import static org.example.managers.CommandManager.execute;
 import static org.example.managers.serverTools.ResponseSenderServer.send;
 import static org.example.managers.serverTools.ResponseSenderServer.sendHuman;
+import static org.example.tools.Printer.print;
 
 public class CommandExecutor {
 
@@ -144,14 +142,9 @@ public class CommandExecutor {
     //count_less_than_impact_speed impactSpeed
     public void countLessThanImpactSpeed(String strIs) {
         Double impactSpeed = parseDouble(strIs);
-        int number = 0;
-        for (HumanBeing obj : collection) {
-            if (!(obj.getImpactSpeed() == null)) {
-                if (obj.getImpactSpeed() < impactSpeed) {
-                    number += 1;
-                }
-            }
-        }
+        long number = collection.stream()
+                .filter(obj -> obj.getImpactSpeed() != null && obj.getImpactSpeed() < impactSpeed)
+                .count();
         send("количество элементов, значение поля impactSpeed которых меньше заданного равно " + number);
     }
 
